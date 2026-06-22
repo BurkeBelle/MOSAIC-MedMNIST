@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+data_224/
+*.npz
+*.pth
+*.ckpt
+*.log

@@ -44,24 +44,112 @@ pip install -r requirements.txt
 
 ## Data Preparation
 
+### 1. MedMNIST (Main Experiments — 18 Datasets)
+
 Download all 18 MedMNIST datasets (224×224 for 2D, 64×64×64 for 3D):
 
 ```python
 import medmnist
 from medmnist import INFO
 
-# 2D datasets
+# 2D datasets (12)
 for name in ['pathmnist', 'dermamnist', 'octmnist', 'pneumoniamnist',
              'chestmnist', 'breastmnist', 'bloodmnist', 'tissuemnist',
              'retinamnist', 'organamnist', 'organcmnist', 'organsmnist']:
     DataClass = getattr(medmnist, INFO[name]['python_class'])
     DataClass(split='train', download=True, root='./data_224', size=224, as_rgb=True)
 
-# 3D datasets
+# 3D datasets (6)
 for name in ['organmnist3d', 'nodulemnist3d', 'adrenalmnist3d',
              'vesselmnist3d', 'fracturemnist3d', 'synapsemnist3d']:
     DataClass = getattr(medmnist, INFO[name]['python_class'])
     DataClass(split='train', download=True, root='./data_224', size=64)
+```
+
+Data directory structure:
+
+```
+./data_224/
+├── pathmnist.npz
+├── dermamnist.npz
+├── ...
+├── organmnist3d.npz
+└── synapsemnist3d.npz
+```
+
+### 2. MedIMeta (2D External Validation)
+
+Five 2D medical image datasets from [MedIMeta Benchmark](https://huggingface.co/datasets/MedIMeta/MedIMeta):
+
+```bash
+pip install datasets
+
+python -c "
+from datasets import load_dataset
+for ds_name in ['bus', 'fundus', 'glaucoma', 'mammo_calc', 'mammo_mass']:
+    ds = load_dataset('MedIMeta/MedIMeta', ds_name)
+    print(f'{ds_name}: {ds}')
+"
+```
+
+Data directory structure:
+
+```
+./Data_MedIMeta/
+├── bus/
+│   ├── train/
+│   ├── val/
+│   └── test/
+├── fundus/
+├── glaucoma/
+├── mammo_calc/
+└── mammo_mass/
+```
+
+### 3. MosMedData (3D External Validation)
+
+COVID-19 chest CT dataset (1,110 cases, 5 severity classes) from [MosMedData](https://mosmed.ai/datasets/covid19_1110).
+
+Download from Kaggle:
+
+```bash
+pip install kagglehub
+
+python -c "
+import kagglehub
+path = kagglehub.dataset_download('mathurinache/mosmeddata-chest-ct-scans-with-covid19')
+print(f'Dataset downloaded to: {path}')
+"
+```
+
+Or download directly: https://www.kaggle.com/datasets/mathurinache/mosmeddata-chest-ct-scans-with-covid19
+
+Raw data structure (NIfTI format, ~25 GB):
+
+```
+MosMedData/
+├── CT-0/       # Normal (254 cases)
+├── CT-1/       # Mild (684 cases)
+├── CT-2/       # Moderate (125 cases)
+├── CT-3/       # Severe (45 cases)
+└── CT-4/       # Critical (2 cases)
+```
+
+Preprocess to 64×64×64 volumes:
+
+```bash
+python preprocess_mosmed.py
+```
+
+Processed output (~1.1 GB):
+
+```
+MosMedData/processed_64/
+├── train.npy           # (888, 64, 64, 64)
+├── train_labels.npy    # (888,)
+├── test.npy            # (222, 64, 64, 64)
+├── test_labels.npy     # (222,)
+└── data_split.json
 ```
 
 ## Pretrained Weights

@@ -10,7 +10,7 @@ MOSAIC is a parameter-efficient framework that trains a single unified model acr
 
 The framework combines a frozen ViT-Base backbone with three hard-routed specialist adapters (Bio-Medical / Radiology / Volumetric), each with a tailored bottleneck capacity. A MedCoSS-style tokenizer handles unified 2D/3D input processing, and an Ark+-style cyclic teacher-student training loop mitigates catastrophic forgetting across datasets.
 
-With only **~7.05M trainable parameters (~7.9%)**, MOSAIC achieves **84.16% ACC** and **89.63 AUC** across all 18 datasets, matching or surpassing single-task specialists on 13 of 18 datasets.
+With only **~7.40M trainable parameters**, MOSAIC achieves **84.16% ACC** and **89.63 AUC** across all 18 datasets, matching or surpassing single-task specialists on 13 of 18 datasets.
 
 ## Architecture
 
@@ -301,7 +301,7 @@ python test.py --checkpoint ./output/mosaic_seed42/best_model.pth --data_root ./
 | Expert B × 12 layers | 1.78M |
 | Expert C × 12 layers | 3.55M |
 | 18 Classification Heads | 0.13M |
-| **Total Trainable** | **~7.05M (7.9%)** |
+| **Total Trainable** | **~7.40M (7.9%)** |
 
 **Per-Seed Results:**
 
@@ -427,4 +427,4 @@ MOSAIC-MedMNIST/
 
 ## License
 
-Apache License 2.0
+MIT License

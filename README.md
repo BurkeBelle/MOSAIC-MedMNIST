@@ -15,7 +15,9 @@ With only **~7.40M trainable parameters**, MOSAIC achieves **84.16% ACC** and **
 ## Architecture
 
 ```
-![Uploading image.png…]()
+<p align="center">
+  <img src="architecture.pdf" width="800"/>
+</p>
 
 ```
 

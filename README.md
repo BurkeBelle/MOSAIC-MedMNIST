@@ -14,11 +14,9 @@ With only **~7.40M trainable parameters**, MOSAIC achieves **84.16% ACC** and **
 
 ## Architecture
 
-```
 <p align="center">
-  <img src="architecture.pdf" width="800"/>
+  <img src="architecture.png" width="800"/>
 </p>
-
 ```
 
 **Three-Expert Hard Routing:**

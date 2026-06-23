@@ -1,30 +1,65 @@
 # MOSAIC-MedMNIST
 
 <p align="center">
-  <a href="https://conferences.miccai.org/2026"><img src="https://img.shields.io/badge/MICCAI-2026-blue" alt="MICCAI 2026"/></a>
-  <a href="https://github.com/BurkeBelle/MOSAIC-MedMNIST"><img src="https://img.shields.io/github/stars/BurkeBelle/MOSAIC-MedMNIST?style=social" alt="GitHub Stars"/></a>
-  <a href="LICENSE"><img src="https://img.shields.io/github/license/BurkeBelle/MOSAIC-MedMNIST" alt="License"/></a>
-  <a href="https://www.python.org/downloads/release/python-390/"><img src="https://img.shields.io/badge/Python-3.9-green" alt="Python 3.9"/></a>
+  <img src="https://img.shields.io/github/license/BurkeBelle/MOSAIC-MedMNIST" alt="License"/>
+  <img src="https://img.shields.io/badge/MICCAI-2026-blue" alt="MICCAI 2026"/>
+  <img src="https://img.shields.io/badge/Python-3.9+-green" alt="Python"/>
+  <img src="https://img.shields.io/badge/PyTorch-1.12+-red" alt="PyTorch"/>
+  <img src="https://img.shields.io/github/stars/BurkeBelle/MOSAIC-MedMNIST?style=social" alt="Stars"/>
 </p>
 
 **Bridging Heterogeneous Medical Datasets via Mixture-of-Specialists Adapters for Unified Medical Image Classification**
 
 *Accepted at MICCAI 2026*
 
+---
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Architecture](#architecture)
+- [Installation](#installation)
+- [Data Preparation](#data-preparation)
+- [Training](#training)
+- [Evaluation](#evaluation)
+- [Implementation Details](#implementation-details)
+- [Results](#results)
+- [Project Structure](#project-structure)
+- [Citation](#citation)
+- [Acknowledgements](#acknowledgements)
+- [License](#license)
+
+---
+
 ## Overview
 
-MOSAIC is a parameter-efficient framework that trains a single unified model across 18 heterogeneous MedMNIST datasets (12 2D + 6 3D) spanning six medical imaging modalities. The key idea is to address **cross-task representation interference** — the performance degradation that occurs when naïvely training one model on diverse medical data — through deterministic expert routing.
+MOSAIC is a parameter-efficient framework that trains a **single unified model** across 18 heterogeneous MedMNIST datasets (12 2D + 6 3D) spanning six medical imaging modalities. The key idea is to address **cross-task representation interference** — the performance degradation that occurs when naïvely training one model on diverse medical data — through deterministic expert routing.
 
 The framework combines a frozen ViT-Base backbone with three hard-routed specialist adapters (Bio-Medical / Radiology / Volumetric), each with a tailored bottleneck capacity. A MedCoSS-style tokenizer handles unified 2D/3D input processing, and an Ark+-style cyclic teacher-student training loop mitigates catastrophic forgetting across datasets.
 
-With only **~7.40M trainable parameters**, MOSAIC achieves **84.16% ACC** and **89.63 AUC** across all 18 datasets, matching or surpassing single-task specialists on 13 of 18 datasets.
+<div align="center">
+
+| | |
+|:---|:---|
+| **Trainable Params** | 7.40M (7.9% of ViT-Base) |
+| **Accuracy** | 84.16 ± 0.21% |
+| **AUC** | 89.63 ± 0.24 |
+| **Datasets** | 18 (12 2D + 6 3D) |
+| **Checkpoint** | 1 unified model |
+
+</div>
 
 ## Architecture
+
 <p align="center">
-  <img src="architecture.png" width="840"/>
+  <img src="figures/architecture.png" width="800"/>
 </p>
 
+> Vector version: [architecture.pdf](figures/architecture.pdf)
+
 **Three-Expert Hard Routing:**
+
+<div align="center">
 
 <table>
   <tr>
@@ -53,6 +88,8 @@ With only **~7.40M trainable parameters**, MOSAIC achieves **84.16% ACC** and **
   </tr>
 </table>
 
+</div>
+
 ## Installation
 
 ```bash
@@ -68,7 +105,7 @@ pip install -r requirements.txt
 
 ### 1. MedMNIST (Main Experiments — 18 Datasets)
 
-Download all 18 MedMNIST datasets (224×224 for 2D, 64×64×64 for 3D):
+Download all 18 MedMNIST datasets (224×224 for 2D, 64×64×64 for 3D). Both 2D and 3D datasets are stored under `data_224/` for unified loading:
 
 ```python
 import medmnist
@@ -273,6 +310,7 @@ python train_baseline.py \
     --output_dir ./output_baseline
 
 # LoRA rank sweep (matched-budget comparison)
+# r=8 uses default: --lora_rank 8 --lora_alpha 16
 python train_baseline.py --mode joint --adapter lora \
     --lora_rank 48 --lora_alpha 96 --seed 42 \
     --data_root ./data_224 --pretrained ./vit_base_patch16_224.npz \
@@ -291,8 +329,9 @@ python test.py --checkpoint ./output/mosaic_seed42/best_model.pth --data_root ./
 ```
 
 ## Implementation Details
+
 <div align="center">
-  
+
 <table>
   <tr>
     <th>Category</th>
@@ -386,6 +425,7 @@ python test.py --checkpoint ./output/mosaic_seed42/best_model.pth --data_root ./
 </div>
 
 **Trainable Parameter Breakdown:**
+
 <div align="center">
 
 <table>
@@ -404,10 +444,11 @@ python test.py --checkpoint ./output/mosaic_seed42/best_model.pth --data_root ./
 </div>
 
 **Per-Seed Results:**
+
 <div align="center">
 
 | Seed | ACC (%) |
-|------|---------|
+|:----:|:-------:|
 | 42 | 84.46 |
 | 123 | 83.97 |
 | 456 | 84.05 |
@@ -420,10 +461,11 @@ python test.py --checkpoint ./output/mosaic_seed42/best_model.pth --data_root ./
 All baselines share the same frozen ViT-Base/16 backbone, tokenizer, and evaluation protocol as MOSAIC.
 
 **Independent mode** (18 separate models, one per dataset):
+
 <div align="center">
 
 | Parameter | Value |
-|-----------|-------|
+|:----------|:------|
 | Optimizer | AdamW |
 | Learning Rate | 1e-3 |
 | Weight Decay | 0.01 |
@@ -435,11 +477,12 @@ All baselines share the same frozen ViT-Base/16 backbone, tokenizer, and evaluat
 
 </div>
 
-**Joint mode** (single shared model, cyclic training):
+**Joint mode** (single shared model, cyclic training — used for LoRA-Joint and VPT-Joint baselines):
+
 <div align="center">
 
 | Parameter | Value |
-|-----------|-------|
+|:----------|:------|
 | Optimizer | AdamW |
 | Learning Rate | 1e-4 |
 | Weight Decay | 0.01 |
@@ -454,7 +497,9 @@ All baselines share the same frozen ViT-Base/16 backbone, tokenizer, and evaluat
 
 </div>
 
-**LoRA configuration:** rank = 8, alpha = 16 (applied to Q and V projections). Rank sweep: r ∈ {8, 48, 192} with alpha = 2r.
+> **Note:** Baselines use 72 rounds (vs. MOSAIC's 50) and EMA momentum 0.999 (vs. MOSAIC's 0.9/0.95). These are tuned separately for baseline convergence; MOSAIC uses lower momentum to allow faster adaptation across heterogeneous tasks.
+
+**LoRA configuration:** rank = 8, alpha = 16 (applied to Q and V projections). Rank sweep: r ∈ {8, 48, 192} with alpha = 2r. The default `--run_all` command uses r=8; see Training section for rank sweep commands.
 
 **VPT configuration:** VPT-Deep with 10 prompt tokens per layer, independent across layers, trunc_normal init (std=0.02).
 
@@ -476,11 +521,13 @@ Performance on 18 MedMNIST datasets (mean ± std over 3 seeds):
 | | 3D | 74.93±0.27 | 78.41±0.91 |
 
 </div>
+
 ### Matched-Budget PEFT Comparison (Table 2)
+
 <div align="center">
-  
+
 | Method | Training | #Models | Trainable | ACC (%) | AUC (%) |
-|--------|----------|---------|-----------|---------|---------|
+|:-------|:--------:|:-------:|:---------:|:-------:|:-------:|
 | LoRA (r=8) | Independent | 18 | 5.40M | 85.50±0.05 | 88.75±0.34 |
 | VPT (P=10) | Independent | 18 | 1.80M | 83.83±0.45 | 86.73±1.22 |
 | VPT (P=10) | Joint | 1 | 0.18M | 78.01±0.24 | 85.45±0.48 |
@@ -489,48 +536,56 @@ Performance on 18 MedMNIST datasets (mean ± std over 3 seeds):
 | **MOSAIC (Ours)** | **Joint** | **1** | **7.40M** | **84.16±0.21** | **89.63±0.24** |
 
 </div>
+
+> **Key takeaway:** Independent training (18 separate models) achieves higher accuracy but requires storing and maintaining 18 checkpoints. MOSAIC provides a single unified checkpoint with competitive performance — when scaling beyond ~25 datasets, MOSAIC becomes more parameter-efficient than LoRA-Independent. Even at matched parameter budget (LoRA r=192, ~7.08M), scaling rank 24× yields only +1% accuracy, indicating that **cross-task interference — not capacity — is the bottleneck**, which MOSAIC's expert routing directly addresses.
+
 ## Project Structure
 
 ```
 MOSAIC-MedMNIST/
-├── train.py # MOSAIC training entry point
-├── train_baseline.py # PEFT baseline experiments (LoRA / VPT)
-├── test.py # Checkpoint evaluation
+├── train.py                  # MOSAIC training entry point
+├── train_baseline.py         # PEFT baseline experiments (LoRA / VPT)
+├── test.py                   # Checkpoint evaluation
+├── setup.sh                  # Environment setup & data download
+├── run.sh                    # Reproduce paper results (3 seeds)
 ├── config/
-│ └── datasets.py # Dataset configs & expert routing table
+│   └── datasets.py           # Dataset configs & expert routing table
 ├── dataloader/
-│ ├── medmnist_loader.py # MedMNIST data loading (2D & 3D)
-│ └── transforms.py # 2D/3D augmentations (intensity-only for 3D)
+│   ├── medmnist_loader.py    # MedMNIST data loading (2D & 3D)
+│   └── transforms.py         # 2D/3D augmentations (intensity-only for 3D)
 ├── model/
-│ ├── adapter.py # AdaptFormer adapter & MoE adapter
-│ ├── patch_embed.py # Unified 2D/3D patch embedding
-│ ├── transformer_block.py # ViT block with parallel adapter
-│ ├── unified_model.py # MOSAIC model & teacher (EMA)
-│ ├── lora_adapter.py # LoRA baseline
-│ ├── vpt_adapter.py # VPT-Deep baseline
-│ └── baseline_model.py # Baseline model factory
+│   ├── adapter.py            # AdaptFormer adapter & MoE adapter
+│   ├── patch_embed.py        # Unified 2D/3D patch embedding
+│   ├── transformer_block.py  # ViT block with parallel adapter
+│   ├── unified_model.py      # MOSAIC model & teacher (EMA)
+│   ├── lora_adapter.py       # LoRA baseline
+│   ├── vpt_adapter.py        # VPT-Deep baseline
+│   └── baseline_model.py     # Baseline model factory
 ├── engine/
-│ ├── trainer.py # Cyclic training loop (Ark+ style)
-│ └── evaluator.py # Multi-metric evaluation (ACC, AUC)
-├── external_eval/ # External validation experiments
-│ ├── configs.py # 2D external dataset configs (MedIMeta)
-│ ├── configs_3d.py # 3D external dataset configs (MosMedData)
-│ ├── dataset.py # 2D external dataset loader
-│ ├── dataset_3d.py # 3D external dataset loader
-│ ├── models.py # 2D evaluation models (linear probe / fine-tune)
-│ ├── models_3d.py # 3D evaluation models
-│ ├── models_unimiss.py # UniMiSS baseline models
-│ ├── evaluate.py # 2D evaluation pipeline
-│ ├── evaluate_3d.py # 3D evaluation pipeline
-│ ├── preprocess_mosmed.py # MosMedData NIfTI → numpy preprocessing
-│ ├── train.py # 2D external training loop
-│ ├── train_3d.py # 3D external training loop
-│ ├── run_adapter_tuning.py # Adapter tuning experiments
-│ ├── run_finetune.py # Fine-tuning experiments
-│ ├── run_multi_seed.py # Multi-seed runner
-│ └── run_*.sh # Shell scripts for batch experiments
+│   ├── trainer.py            # Cyclic training loop (Ark+ style)
+│   └── evaluator.py          # Multi-metric evaluation (ACC, AUC)
+├── external_eval/            # External validation experiments
+│   ├── configs.py            # 2D external dataset configs (MedIMeta)
+│   ├── configs_3d.py         # 3D external dataset configs (MosMedData)
+│   ├── dataset.py            # 2D external dataset loader
+│   ├── dataset_3d.py         # 3D external dataset loader
+│   ├── models.py             # 2D evaluation models (linear probe / fine-tune)
+│   ├── models_3d.py          # 3D evaluation models
+│   ├── models_unimiss.py     # UniMiSS baseline models
+│   ├── evaluate.py           # 2D evaluation pipeline
+│   ├── evaluate_3d.py        # 3D evaluation pipeline
+│   ├── preprocess_mosmed.py  # MosMedData NIfTI → numpy preprocessing
+│   ├── train.py              # 2D external training loop
+│   ├── train_3d.py           # 3D external training loop
+│   ├── run_adapter_tuning.py # Adapter tuning experiments
+│   ├── run_finetune.py       # Fine-tuning experiments
+│   ├── run_multi_seed.py     # Multi-seed runner
+│   └── run_*.sh              # Shell scripts for batch experiments
+├── figures/
+│   ├── architecture.png      # Model architecture diagram
+│   └── architecture.pdf      # Vector version
 ├── utils/
-│ └── logger.py # Experiment logging & visualization
+│   └── logger.py             # Experiment logging & visualization
 ├── requirements.txt
 └── README.md
 ```
@@ -538,8 +593,16 @@ MOSAIC-MedMNIST/
 ## Citation
 
 ```bibtex
-
+@inproceedings{huang2026mosaic,
+  title     = {Bridging Heterogeneous Medical Datasets via Mixture-of-Specialists Adapters
+               for Unified Medical Image Classification},
+  author    = {Huang, Shixing},
+  booktitle = {Medical Image Computing and Computer Assisted Intervention (MICCAI)},
+  year      = {2026}
+}
 ```
+
+> Full BibTeX with volume/pages will be updated after the Springer LNCS proceedings are published (post-September 2026).
 
 ## Acknowledgements
 
@@ -550,4 +613,4 @@ MOSAIC-MedMNIST/
 
 ## License
 
-MIT License
+This project is licensed under the [MIT License](LICENSE).

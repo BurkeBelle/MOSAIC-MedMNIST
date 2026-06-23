@@ -33,9 +33,21 @@
 
 ## Overview
 
-MOSAIC is a parameter-efficient framework that trains a **single unified model** across 18 heterogeneous MedMNIST datasets (12 2D + 6 3D) spanning six medical imaging modalities. The key idea is to address **cross-task representation interference** — the performance degradation that occurs when naïvely training one model on diverse medical data — through deterministic expert routing.
+MOSAIC trains one model on 18 MedMNIST datasets (12 2D + 6 3D) covering six
+imaging modalities. Training a single model on this many different datasets
+usually hurts accuracy, because the tasks interfere with each other. MOSAIC
+reduces this interference by routing each dataset to a fixed specialist.
 
-The framework combines a frozen ViT-Base backbone with three hard-routed specialist adapters (Bio-Medical / Radiology / Volumetric), each with a tailored bottleneck capacity. A MedCoSS-style tokenizer handles unified 2D/3D input processing, and an Ark+-style cyclic teacher-student training loop mitigates catastrophic forgetting across datasets.
+The backbone is a frozen ViT-Base. On top of it we add three specialist
+adapters — one for bio-medical (RGB) images, one for radiology (grayscale),
+and one for 3D volumes — each with its own bottleneck size. A MedCoSS-style
+tokenizer handles both 2D and 3D inputs, and we train with an Ark+-style
+cyclic teacher-student loop to limit forgetting as the model cycles through
+datasets.
+
+With about 7.40M trainable parameters (7.9% of the backbone), MOSAIC reaches
+84.16% accuracy and 89.63 AUC across all 18 datasets, and matches or beats
+single-task models on 13 of them.
 
 <div align="center">
 

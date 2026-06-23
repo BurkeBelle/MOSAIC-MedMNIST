@@ -52,7 +52,7 @@ The framework combines a frozen ViT-Base backbone with three hard-routed special
 ## Architecture
 
 <p align="center">
-  <img src="figures/architecture.png" width="800"/>
+  <img src="architecture.png" width="800"/>
 </p>
 
 > Vector version: [architecture.pdf](figures/architecture.pdf)

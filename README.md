@@ -8,7 +8,7 @@
   <a href="https://github.com/BurkeBelle/MOSAIC-MedMNIST/stargazers"><img src="https://img.shields.io/github/stars/BurkeBelle/MOSAIC-MedMNIST?style=social" alt="Stars"/></a>
 </p>
 
-**Bridging Heterogeneous Medical Datasets via Mixture-of-Specialists Adapters for Unified Medical Image Classification**
+***Bridging Heterogeneous Medical Datasets via Mixture-of-Specialists Adapters for Unified Medical Image Classification***
 
 *Accepted at MICCAI 2026*
 

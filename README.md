@@ -379,6 +379,7 @@ python test.py --checkpoint ./output/mosaic_seed42/best_model.pth --data_root ./
 </div>
 
 **Trainable Parameter Breakdown:**
+<div align="center">
 
 <table>
   <tr>
@@ -393,7 +394,10 @@ python test.py --checkpoint ./output/mosaic_seed42/best_model.pth --data_root ./
   <tr><td><b>Total Trainable</b></td><td align="right"><b>~7.40M (7.9%)</b></td></tr>
 </table>
 
+</div>
+
 **Per-Seed Results:**
+<div align="center">
 
 | Seed | ACC (%) |
 |------|---------|
@@ -402,11 +406,14 @@ python test.py --checkpoint ./output/mosaic_seed42/best_model.pth --data_root ./
 | 456 | 84.05 |
 | **Mean ± Std** | **84.16 ± 0.26** |
 
+</div>
+
 ### PEFT Baseline Settings
 
 All baselines share the same frozen ViT-Base/16 backbone, tokenizer, and evaluation protocol as MOSAIC.
 
 **Independent mode** (18 separate models, one per dataset):
+<div align="center">
 
 | Parameter | Value |
 |-----------|-------|
@@ -419,7 +426,10 @@ All baselines share the same frozen ViT-Base/16 backbone, tokenizer, and evaluat
 | Batch Size | 32 |
 | Teacher-Student | None |
 
+</div>
+
 **Joint mode** (single shared model, cyclic training):
+<div align="center">
 
 | Parameter | Value |
 |-----------|-------|
@@ -435,6 +445,8 @@ All baselines share the same frozen ViT-Base/16 backbone, tokenizer, and evaluat
 | EMA Momentum | 0.999 |
 | Gradient Clipping | max_norm = 1.0 |
 
+</div>
+
 **LoRA configuration:** rank = 8, alpha = 16 (applied to Q and V projections). Rank sweep: r ∈ {8, 48, 192} with alpha = 2r.
 
 **VPT configuration:** VPT-Deep with 10 prompt tokens per layer, independent across layers, trunc_normal init (std=0.02).
@@ -444,7 +456,8 @@ All baselines share the same frozen ViT-Base/16 backbone, tokenizer, and evaluat
 ### Main Results (Table 1)
 
 Performance on 18 MedMNIST datasets (mean ± std over 3 seeds):
-
+<div align="center">
+  
 | Method | ACC (%) | AUC (%) |
 |--------|---------|---------|
 | Official (ResNet-18) | 80.32 | 89.92 |
@@ -452,13 +465,19 @@ Performance on 18 MedMNIST datasets (mean ± std over 3 seeds):
 | Joint baseline (ViT-B) | 77.66±0.66 | 84.55±0.35 |
 | **MOSAIC (Ours)** | **84.16±0.21** | **89.63±0.24** |
 
+</div>
+
+<div align="center">
+  
 | Split | ACC (%) | AUC (%) |
 |-------|---------|---------|
 | 2D Average | 88.78±0.28 | 95.24±0.09 |
 | 3D Average | 74.93±0.27 | 78.41±0.91 |
 
+</div>
 ### Matched-Budget PEFT Comparison (Table 2)
-
+<div align="center">
+  
 | Method | Training | #Models | Trainable | ACC (%) | AUC (%) |
 |--------|----------|---------|-----------|---------|---------|
 | LoRA (r=8) | Independent | 18 | 5.40M | 85.50±0.05 | 88.75±0.34 |
@@ -468,6 +487,7 @@ Performance on 18 MedMNIST datasets (mean ± std over 3 seeds):
 | LoRA (r=192) | Joint | 1 | 7.08M | 81.01±0.25 | 87.89±0.73 |
 | **MOSAIC (Ours)** | **Joint** | **1** | **7.40M** | **84.16±0.21** | **89.63±0.24** |
 
+</div>
 ## Project Structure
 
 ```

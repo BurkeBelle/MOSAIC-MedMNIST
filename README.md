@@ -13,11 +13,9 @@ The framework combines a frozen ViT-Base backbone with three hard-routed special
 With only **~7.40M trainable parameters**, MOSAIC achieves **84.16% ACC** and **89.63 AUC** across all 18 datasets, matching or surpassing single-task specialists on 13 of 18 datasets.
 
 ## Architecture
-
 <p align="center">
-  <img src="architecture.png" width="800"/>
+  <img src="architecture.png" width="840"/>
 </p>
-```
 
 **Three-Expert Hard Routing:**
 

@@ -6,3 +6,7 @@ scikit-learn>=1.0.0
 matplotlib>=3.5.0
 pandas>=1.4.0
 Pillow>=9.0.0
+# External validation dependencies
+timm>=0.6.0
+nibabel>=4.0.0
+scipy>=1.7.0

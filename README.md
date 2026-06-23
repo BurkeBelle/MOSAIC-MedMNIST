@@ -19,11 +19,32 @@ With only **~7.40M trainable parameters**, MOSAIC achieves **84.16% ACC** and **
 
 **Three-Expert Hard Routing:**
 
-| Expert | Modality | Datasets | Bottleneck |
-|--------|----------|----------|------------|
-| A (Bio-Medical) | RGB, microscopic texture | PathMNIST, BloodMNIST, TissueMNIST, DermaMNIST, RetinaMNIST | 64 |
-| B (Radiology) | Grayscale, macro geometry | ChestMNIST, PneumoniaMNIST, BreastMNIST, OCTMNIST, OrganAMNIST, OrganCMNIST, OrganSMNIST | 96 |
-| C (Volumetric) | 3D voxel, spatial structure | OrganMNIST3D, NoduleMNIST3D, AdrenalMNIST3D, VesselMNIST3D, FractureMNIST3D, SynapseMNIST3D | 192 |
+<table>
+  <tr>
+    <th>Expert</th>
+    <th>Modality</th>
+    <th>Datasets</th>
+    <th>Bottleneck</th>
+  </tr>
+  <tr>
+    <td><b>A</b> (Bio-Medical)</td>
+    <td>RGB, microscopic texture</td>
+    <td>PathMNIST, BloodMNIST, TissueMNIST, DermaMNIST, RetinaMNIST</td>
+    <td align="center">64</td>
+  </tr>
+  <tr>
+    <td><b>B</b> (Radiology)</td>
+    <td>Grayscale, macro geometry</td>
+    <td>ChestMNIST, PneumoniaMNIST, BreastMNIST, OCTMNIST, OrganAMNIST, OrganCMNIST, OrganSMNIST</td>
+    <td align="center">96</td>
+  </tr>
+  <tr>
+    <td><b>C</b> (Volumetric)</td>
+    <td>3D voxel, spatial structure</td>
+    <td>OrganMNIST3D, NoduleMNIST3D, AdrenalMNIST3D, VesselMNIST3D, FractureMNIST3D, SynapseMNIST3D</td>
+    <td align="center">192</td>
+  </tr>
+</table>
 
 ## Installation
 

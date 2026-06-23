@@ -4,8 +4,8 @@ MosMedData Preprocessing Script
 Convert NIfTI CT volumes to 64x64x64 numpy arrays for 3D external validation.
 
 Task: Binary classification - CT-0 (Normal) vs CT-1~4 (COVID-19 positive)
-Input: /root/lanyun-tmp/MosMedData/CT-{0,1,2,3,4}/*.nii
-Output: /root/lanyun-tmp/MosMedData/processed_64/
+Input: ./Data_MosMedData/CT-{0,1,2,3,4}/*.nii
+Output: ./Data_MosMedData/processed_64/
     - train.npy, train_labels.npy
     - test.npy, test_labels.npy
     - data_split.json

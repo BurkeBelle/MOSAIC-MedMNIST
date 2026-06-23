@@ -285,38 +285,110 @@ python test.py --checkpoint ./output/mosaic_seed42/best_model.pth --data_root ./
 
 ## Implementation Details
 
-| Category | Parameter | Value |
-|----------|-----------|-------|
-| **Backbone** | Model | ViT-Base/16 |
-| | Pretrained | ImageNet-21k (.npz) |
-| | Freeze | ✓ |
-| **Adapter** | Mode | v2_moe (3 experts) |
-| | Expert A (Bio-Medical) | bottleneck = 64 |
-| | Expert B (Radiology) | bottleneck = 96 |
-| | Expert C (Volumetric) | bottleneck = 192 |
-| | Scale | 0.1 |
-| **EMA** | 2D Momentum | 0.9 |
-| | 3D Momentum | 0.95 |
-| **Loss** | Consistency Weight | 0.1 |
-| | Total Loss | L_cls + 0.1 × L_consist |
-| **Training** | Rounds | 50 (early stopping) |
-| | Batch Size | 32 |
-| | Learning Rate | 1e-4 |
-| | Optimizer | AdamW (weight_decay=0.01) |
-| | LR Schedule | Linear warmup (5 rounds) + Cosine |
-| | Early Stopping | 5 rounds patience |
-| **Seeds** | | 42, 123, 456 |
+<table>
+  <tr>
+    <th>Category</th>
+    <th>Parameter</th>
+    <th>Value</th>
+  </tr>
+  <tr>
+    <td rowspan="3"><b>Backbone</b></td>
+    <td>Model</td>
+    <td>ViT-Base/16</td>
+  </tr>
+  <tr>
+    <td>Pretrained</td>
+    <td>ImageNet-21k (.npz)</td>
+  </tr>
+  <tr>
+    <td>Freeze</td>
+    <td>✓</td>
+  </tr>
+  <tr>
+    <td rowspan="5"><b>Adapter</b></td>
+    <td>Mode</td>
+    <td>v2_moe (3 experts)</td>
+  </tr>
+  <tr>
+    <td>Expert A (Bio-Medical)</td>
+    <td>bottleneck = 64</td>
+  </tr>
+  <tr>
+    <td>Expert B (Radiology)</td>
+    <td>bottleneck = 96</td>
+  </tr>
+  <tr>
+    <td>Expert C (Volumetric)</td>
+    <td>bottleneck = 192</td>
+  </tr>
+  <tr>
+    <td>Scale</td>
+    <td>0.1</td>
+  </tr>
+  <tr>
+    <td rowspan="2"><b>EMA</b></td>
+    <td>2D Momentum</td>
+    <td>0.9</td>
+  </tr>
+  <tr>
+    <td>3D Momentum</td>
+    <td>0.95</td>
+  </tr>
+  <tr>
+    <td rowspan="2"><b>Loss</b></td>
+    <td>Consistency Weight</td>
+    <td>0.1</td>
+  </tr>
+  <tr>
+    <td>Total Loss</td>
+    <td>L_cls + 0.1 × L_consist</td>
+  </tr>
+  <tr>
+    <td rowspan="6"><b>Training</b></td>
+    <td>Rounds</td>
+    <td>50 (early stopping)</td>
+  </tr>
+  <tr>
+    <td>Batch Size</td>
+    <td>32</td>
+  </tr>
+  <tr>
+    <td>Learning Rate</td>
+    <td>1e-4</td>
+  </tr>
+  <tr>
+    <td>Optimizer</td>
+    <td>AdamW (weight_decay=0.01)</td>
+  </tr>
+  <tr>
+    <td>LR Schedule</td>
+    <td>Linear warmup (5 rounds) + Cosine</td>
+  </tr>
+  <tr>
+    <td>Early Stopping</td>
+    <td>5 rounds patience</td>
+  </tr>
+  <tr>
+    <td><b>Seeds</b></td>
+    <td></td>
+    <td>42, 123, 456</td>
+  </tr>
+</table>
 
 **Trainable Parameter Breakdown:**
 
-| Component | Params |
-|-----------|--------|
-| 3D Tokenizer | 0.40M |
-| Expert A × 12 layers | 1.19M |
-| Expert B × 12 layers | 1.78M |
-| Expert C × 12 layers | 3.55M |
-| 18 Classification Heads | 0.13M |
-| **Total Trainable** | **~7.40M (7.9%)** |
+<table>
+  <tr>
+    <th>Component</th>
+    <th align="right">Params</th>
+  </tr>
+  <tr><td>3D Tokenizer</td><td align="right">0.40M</td></tr>
+  <tr><td>Expert A × 12 layers</td><td align="right">1.19M</td></tr>
+  <tr><td>Expert B × 12 layers</td><td align="right">1.78M</td></tr>
+  <tr><td>Expert C × 12 layers</td><td align="right">3.55M</td></tr>
+  <tr><td>18 Classification Heads</td><td align="right">0.13M</td></tr>
+  <tr><td><b>Total Trainable</b></td><td align="right"><b>~7.40M (7.9%)</b></td></tr>
+</table>
 
 **Per-Seed Results:**
 

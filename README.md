@@ -89,6 +89,57 @@ MOSAIC trains one model on all 18 MedMNIST datasets (12 2D + 6 3D) — not 18 se
 </div>
 Each dataset is assigned to exactly one specialist adapter based on imaging modality. This routing is fixed before training and does not involve learned gating. Note that this is not the only valid grouping: datasets could also be split by anatomy, resolution, or task type (binary vs. multi-class), which may yield different routing tables. We chose modality-based routing because it aligns with the most salient visual differences across datasets (color space, spatial dimensionality, texture statistics).
 
+## Project Structure
+
+```
+MOSAIC-MedMNIST/
+├── train.py                  # MOSAIC training entry point
+├── train_baseline.py         # PEFT baseline experiments (LoRA / VPT)
+├── test.py                   # Checkpoint evaluation
+├── setup.sh                  # Environment setup & data download
+├── run.sh                    # Reproduce paper results (3 seeds)
+├── config/
+│   └── datasets.py           # Dataset configs & expert routing table
+├── dataloader/
+│   ├── medmnist_loader.py    # MedMNIST data loading (2D & 3D)
+│   └── transforms.py         # 2D/3D augmentations (intensity-only for 3D)
+├── model/
+│   ├── adapter.py            # AdaptFormer adapter & MoE adapter
+│   ├── patch_embed.py        # Unified 2D/3D patch embedding
+│   ├── transformer_block.py  # ViT block with parallel adapter
+│   ├── unified_model.py      # MOSAIC model & teacher (EMA)
+│   ├── lora_adapter.py       # LoRA baseline
+│   ├── vpt_adapter.py        # VPT-Deep baseline
+│   └── baseline_model.py     # Baseline model factory
+├── engine/
+│   ├── trainer.py            # Cyclic training loop (Ark+ style)
+│   └── evaluator.py          # Multi-metric evaluation (ACC, AUC)
+├── external_eval/            # External validation experiments
+│   ├── configs.py            # 2D external dataset configs (MedIMeta)
+│   ├── configs_3d.py         # 3D external dataset configs (MosMedData)
+│   ├── dataset.py            # 2D external dataset loader
+│   ├── dataset_3d.py         # 3D external dataset loader
+│   ├── models.py             # 2D evaluation models (linear probe / fine-tune)
+│   ├── models_3d.py          # 3D evaluation models
+│   ├── models_unimiss.py     # UniMiSS baseline models
+│   ├── evaluate.py           # 2D evaluation pipeline
+│   ├── evaluate_3d.py        # 3D evaluation pipeline
+│   ├── preprocess_mosmed.py  # MosMedData NIfTI → numpy preprocessing
+│   ├── train.py              # 2D external training loop
+│   ├── train_3d.py           # 3D external training loop
+│   ├── run_adapter_tuning.py # Adapter tuning experiments
+│   ├── run_finetune.py       # Fine-tuning experiments
+│   ├── run_multi_seed.py     # Multi-seed runner
+│   └── run_*.sh              # Shell scripts for batch experiments
+├── figures/
+│   ├── architecture.png      # Model architecture diagram
+│   └── architecture.pdf      # Vector version
+├── utils/
+│   └── logger.py             # Experiment logging & visualization
+├── requirements.txt
+└── README.md
+```
+
 ## Installation
 
 ```bash
@@ -538,56 +589,6 @@ Performance on 18 MedMNIST datasets (mean ± std over 3 seeds):
 
 Why not just train 18 LoRA models? You can. LoRA-Independent (r=8) hits 85.50%, higher than MOSAIC's 84.16%. But that's 18 separate checkpoints. MOSAIC is one. Past ~25 datasets, MOSAIC's total parameter cost is actually lower. Also worth noting: scaling LoRA rank from 8 to 192 (24×) only gains ~1% accuracy, which suggests the real problem isn't model capacity, it's interference between tasks. That's exactly what expert routing is designed to fix.
 
-## Project Structure
-
-```
-MOSAIC-MedMNIST/
-├── train.py                  # MOSAIC training entry point
-├── train_baseline.py         # PEFT baseline experiments (LoRA / VPT)
-├── test.py                   # Checkpoint evaluation
-├── setup.sh                  # Environment setup & data download
-├── run.sh                    # Reproduce paper results (3 seeds)
-├── config/
-│   └── datasets.py           # Dataset configs & expert routing table
-├── dataloader/
-│   ├── medmnist_loader.py    # MedMNIST data loading (2D & 3D)
-│   └── transforms.py         # 2D/3D augmentations (intensity-only for 3D)
-├── model/
-│   ├── adapter.py            # AdaptFormer adapter & MoE adapter
-│   ├── patch_embed.py        # Unified 2D/3D patch embedding
-│   ├── transformer_block.py  # ViT block with parallel adapter
-│   ├── unified_model.py      # MOSAIC model & teacher (EMA)
-│   ├── lora_adapter.py       # LoRA baseline
-│   ├── vpt_adapter.py        # VPT-Deep baseline
-│   └── baseline_model.py     # Baseline model factory
-├── engine/
-│   ├── trainer.py            # Cyclic training loop (Ark+ style)
-│   └── evaluator.py          # Multi-metric evaluation (ACC, AUC)
-├── external_eval/            # External validation experiments
-│   ├── configs.py            # 2D external dataset configs (MedIMeta)
-│   ├── configs_3d.py         # 3D external dataset configs (MosMedData)
-│   ├── dataset.py            # 2D external dataset loader
-│   ├── dataset_3d.py         # 3D external dataset loader
-│   ├── models.py             # 2D evaluation models (linear probe / fine-tune)
-│   ├── models_3d.py          # 3D evaluation models
-│   ├── models_unimiss.py     # UniMiSS baseline models
-│   ├── evaluate.py           # 2D evaluation pipeline
-│   ├── evaluate_3d.py        # 3D evaluation pipeline
-│   ├── preprocess_mosmed.py  # MosMedData NIfTI → numpy preprocessing
-│   ├── train.py              # 2D external training loop
-│   ├── train_3d.py           # 3D external training loop
-│   ├── run_adapter_tuning.py # Adapter tuning experiments
-│   ├── run_finetune.py       # Fine-tuning experiments
-│   ├── run_multi_seed.py     # Multi-seed runner
-│   └── run_*.sh              # Shell scripts for batch experiments
-├── figures/
-│   ├── architecture.png      # Model architecture diagram
-│   └── architecture.pdf      # Vector version
-├── utils/
-│   └── logger.py             # Experiment logging & visualization
-├── requirements.txt
-└── README.md
-```
 
 ## Citation
 

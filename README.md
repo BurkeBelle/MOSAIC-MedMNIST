@@ -1,5 +1,12 @@
 # MOSAIC-MedMNIST
 
+<p align="center">
+  <img src="https://img.shields.io/badge/MICCAI-2026-blue" alt="MICCAI 2026"/>
+  <img src="https://img.shields.io/badge/Python-3.9-green" alt="Python 3.9"/>
+  <img src="https://img.shields.io/badge/License-MIT-yellow" alt="License: MIT"/>
+  <img src="https://img.shields.io/badge/MedMNIST-18_datasets-orange" alt="MedMNIST"/>
+</p>
+
 **Bridging Heterogeneous Medical Datasets via Mixture-of-Specialists Adapters for Unified Medical Image Classification**
 
 *Accepted at MICCAI 2026*

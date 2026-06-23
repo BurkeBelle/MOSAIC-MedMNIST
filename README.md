@@ -55,7 +55,7 @@ MOSAIC trains one model on all 18 MedMNIST datasets (12 2D + 6 3D) — not 18 se
 
 > Vector version: [architecture.pdf](figures/architecture.pdf)
 
-**Three-Expert Hard Routing:**
+**Deterministic Three-Expert Routing:**
 
 <div align="center">
 
@@ -87,6 +87,7 @@ MOSAIC trains one model on all 18 MedMNIST datasets (12 2D + 6 3D) — not 18 se
 </table>
 
 </div>
+Each dataset is assigned to exactly one specialist adapter based on imaging modality. This routing is fixed before training and does not involve learned gating. Note that this is not the only valid grouping: datasets could also be split by anatomy, resolution, or task type (binary vs. multi-class), which may yield different routing tables. We chose modality-based routing because it aligns with the most salient visual differences across datasets (color space, spatial dimensionality, texture statistics).
 
 ## Installation
 

@@ -456,23 +456,17 @@ All baselines share the same frozen ViT-Base/16 backbone, tokenizer, and evaluat
 ### Main Results (Table 1)
 
 Performance on 18 MedMNIST datasets (mean ± std over 3 seeds):
-<div align="center">
-  
-| Method | ACC (%) | AUC (%) |
-|--------|---------|---------|
-| Official (ResNet-18) | 80.32 | 89.92 |
-| Single-task (ViT-B) | 81.86±0.38 | 87.81±0.07 |
-| Joint baseline (ViT-B) | 77.66±0.66 | 84.55±0.35 |
-| **MOSAIC (Ours)** | **84.16±0.21** | **89.63±0.24** |
-
-</div>
 
 <div align="center">
-  
-| Split | ACC (%) | AUC (%) |
-|-------|---------|---------|
-| 2D Average | 88.78±0.28 | 95.24±0.09 |
-| 3D Average | 74.93±0.27 | 78.41±0.91 |
+
+| Method | Split | ACC (%) | AUC (%) |
+|:-------|:-----:|:-------:|:-------:|
+| Official (ResNet-18) | All | 80.32 | 89.92 |
+| Single-task (ViT-B) | All | 81.86±0.38 | 87.81±0.07 |
+| Joint baseline (ViT-B) | All | 77.66±0.66 | 84.55±0.35 |
+| **MOSAIC (Ours)** | **All** | **84.16±0.21** | **89.63±0.24** |
+| | 2D | 88.78±0.28 | 95.24±0.09 |
+| | 3D | 74.93±0.27 | 78.41±0.91 |
 
 </div>
 ### Matched-Budget PEFT Comparison (Table 2)

@@ -284,7 +284,8 @@ python test.py --checkpoint ./output/mosaic_seed42/best_model.pth --data_root ./
 ```
 
 ## Implementation Details
-
+<div align="center">
+  
 <table>
   <tr>
     <th>Category</th>
@@ -374,6 +375,8 @@ python test.py --checkpoint ./output/mosaic_seed42/best_model.pth --data_root ./
     <td>42, 123, 456</td>
   </tr>
 </table>
+
+</div>
 
 **Trainable Parameter Breakdown:**
 

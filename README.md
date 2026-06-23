@@ -1,11 +1,11 @@
 # MOSAIC-MedMNIST
 
 <p align="center">
-  <img src="https://img.shields.io/github/license/BurkeBelle/MOSAIC-MedMNIST" alt="License"/>
-  <img src="https://img.shields.io/badge/MICCAI-2026-blue" alt="MICCAI 2026"/>
-  <img src="https://img.shields.io/badge/Python-3.9+-green" alt="Python"/>
-  <img src="https://img.shields.io/badge/PyTorch-1.12+-red" alt="PyTorch"/>
-  <img src="https://img.shields.io/github/stars/BurkeBelle/MOSAIC-MedMNIST?style=social" alt="Stars"/>
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/BurkeBelle/MOSAIC-MedMNIST" alt="License"/></a>
+  <a href="https://conferences.miccai.org/2026"><img src="https://img.shields.io/badge/MICCAI-2026-blue" alt="MICCAI 2026"/></a>
+  <a href="https://www.python.org"><img src="https://img.shields.io/badge/Python-3.9+-green" alt="Python"/></a>
+  <a href="https://pytorch.org"><img src="https://img.shields.io/badge/PyTorch-1.12+-red" alt="PyTorch"/></a>
+  <a href="https://github.com/BurkeBelle/MOSAIC-MedMNIST/stargazers"><img src="https://img.shields.io/github/stars/BurkeBelle/MOSAIC-MedMNIST?style=social" alt="Stars"/></a>
 </p>
 
 **Bridging Heterogeneous Medical Datasets via Mixture-of-Specialists Adapters for Unified Medical Image Classification**

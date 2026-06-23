@@ -1,10 +1,10 @@
 # MOSAIC-MedMNIST
 
 <p align="center">
-  <img src="https://img.shields.io/badge/MICCAI-2026-blue" alt="MICCAI 2026"/>
-  <img src="https://img.shields.io/badge/Python-3.9-green" alt="Python 3.9"/>
-  <img src="https://img.shields.io/badge/License-MIT-yellow" alt="License: MIT"/>
-  <img src="https://img.shields.io/badge/MedMNIST-18_datasets-orange" alt="MedMNIST"/>
+  <a href="https://conferences.miccai.org/2026"><img src="https://img.shields.io/badge/MICCAI-2026-blue" alt="MICCAI 2026"/></a>
+  <a href="https://github.com/BurkeBelle/MOSAIC-MedMNIST"><img src="https://img.shields.io/github/stars/BurkeBelle/MOSAIC-MedMNIST?style=social" alt="GitHub Stars"/></a>
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/BurkeBelle/MOSAIC-MedMNIST" alt="License"/></a>
+  <a href="https://www.python.org/downloads/release/python-390/"><img src="https://img.shields.io/badge/Python-3.9-green" alt="Python 3.9"/></a>
 </p>
 
 **Bridging Heterogeneous Medical Datasets via Mixture-of-Specialists Adapters for Unified Medical Image Classification**

@@ -15,12 +15,8 @@ With only **~7.40M trainable parameters**, MOSAIC achieves **84.16% ACC** and **
 ## Architecture
 
 ```
-Input (2D/3D) → Tokenizer → [CLS] + Patches + PosEmbed
-                                    ↓
-              Frozen ViT-Base Transformer × 12 layers
-              (each layer has a parallel MoS Adapter)
-                                    ↓
-                        CLS Feature → Task Head → Prediction
+![Uploading image.png…]()
+
 ```
 
 **Three-Expert Hard Routing:**

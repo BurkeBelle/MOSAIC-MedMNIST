@@ -33,21 +33,7 @@
 
 ## Overview
 
-MOSAIC trains one model on 18 MedMNIST datasets (12 2D + 6 3D) covering six
-imaging modalities. Training a single model on this many different datasets
-usually hurts accuracy, because the tasks interfere with each other. MOSAIC
-reduces this interference by routing each dataset to a fixed specialist.
-
-The backbone is a frozen ViT-Base. On top of it we add three specialist
-adapters — one for bio-medical (RGB) images, one for radiology (grayscale),
-and one for 3D volumes — each with its own bottleneck size. A MedCoSS-style
-tokenizer handles both 2D and 3D inputs, and we train with an Ark+-style
-cyclic teacher-student loop to limit forgetting as the model cycles through
-datasets.
-
-With about 7.40M trainable parameters (7.9% of the backbone), MOSAIC reaches
-84.16% accuracy and 89.63 AUC across all 18 datasets, and matches or beats
-single-task models on 13 of them.
+MOSAIC trains one model on all 18 MedMNIST datasets (12 2D + 6 3D) — not 18 separate ones. The core problem: naïvely sharing a single backbone across diverse medical tasks causes performance to drop (we call this cross-task interference). MOSAIC reduces it with three domain-specific adapters plugged into a frozen ViT-Base, each handling a different imaging modality (Bio-Medical RGB / Radiology grayscale / 3D volumetric). A cyclic training loop borrowed from Ark+ prevents forgetting across datasets.
 
 <div align="center">
 
@@ -549,7 +535,7 @@ Performance on 18 MedMNIST datasets (mean ± std over 3 seeds):
 
 </div>
 
-> **Key takeaway:** Independent training (18 separate models) achieves higher accuracy but requires storing and maintaining 18 checkpoints. MOSAIC provides a single unified checkpoint with competitive performance — when scaling beyond ~25 datasets, MOSAIC becomes more parameter-efficient than LoRA-Independent. Even at matched parameter budget (LoRA r=192, ~7.08M), scaling rank 24× yields only +1% accuracy, indicating that **cross-task interference — not capacity — is the bottleneck**, which MOSAIC's expert routing directly addresses.
+Why not just train 18 LoRA models? You can. LoRA-Independent (r=8) hits 85.50%, higher than MOSAIC's 84.16%. But that's 18 separate checkpoints. MOSAIC is one. Past ~25 datasets, MOSAIC's total parameter cost is actually lower. Also worth noting: scaling LoRA rank from 8 to 192 (24×) only gains ~1% accuracy, which suggests the real problem isn't model capacity, it's interference between tasks. That's exactly what expert routing is designed to fix.
 
 ## Project Structure
 

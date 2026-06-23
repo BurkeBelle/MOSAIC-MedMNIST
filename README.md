@@ -421,12 +421,7 @@ MOSAIC-MedMNIST/
 ## Citation
 
 ```bibtex
-@inproceedings{huang2026mosaic,
-  title={Bridging Heterogeneous Medical Datasets via Mixture-of-Specialists Adapters for Unified Medical Image Classification},
-  author={Huang, Shixing},
-  booktitle={Medical Image Computing and Computer Assisted Intervention (MICCAI)},
-  year={2026}
-}
+
 ```
 
 ## Acknowledgements
